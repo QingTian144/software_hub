@@ -2,7 +2,8 @@
 
 ## 1. 创建虚拟环境
 python3 -m venv venv
-source venv/bin/activate (Windows: venv\Scripts\activate)
+
+source venv/bin/activate  (Windows: venv\Scripts\activate)
 
 ## 2. 安装依赖
 pip install -r requirements.txt
