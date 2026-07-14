@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}注册{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h2>用户注册</h2>
+        <form method="POST" class="auth-form">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" name="username" required minlength="3" maxlength="20" placeholder="3-20个字符">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" name="password" required minlength="6" placeholder="至少6个字符">
+            </div>
+            <div class="form-group">
+                <label>确认密码</label>
+                <input type="password" name="confirm" required placeholder="再次输入密码">
+            </div>
+            <div class="form-group">
+                <label>邀请码</label>
+                <input type="text" name="invite_code" required placeholder="输入邀请码">
+            </div>
+            <button type="submit" class="btn btn-block">注 册</button>
+        </form>
+        <p class="auth-link">已有账号？<a href="{{ url_for('login') }}">去登录</a></p>
+    </div>
+</div>
+{% endblock %}

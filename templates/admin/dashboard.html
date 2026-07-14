@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+{% block title %}管理后台 - 概览{% endblock %}
+{% block content %}
+<h2 class="page-title">📊 系统概览</h2>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.users }}</div>
+        <div class="stat-label">注册用户</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.files }}</div>
+        <div class="stat-label">文件总数</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.downloads }}</div>
+        <div class="stat-label">总下载量</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.invites_unused }}/{{ stats.invites_total }}</div>
+        <div class="stat-label">可用邀请码</div>
+    </div>
+</div>
+
+<div class="admin-sections">
+    <div class="admin-section">
+        <h3>最近上传的文件</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>文件名</th><th>大小</th><th>上传时间</th></tr>
+            </thead>
+            <tbody>
+                {% for file in recent_files %}
+                <tr>
+                    <td>{{ file.original_name }}</td>
+                    <td>{{ file.size | format_size }}</td>
+                    <td>{{ file.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="empty">暂无文件</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="admin-section">
+        <h3>最近注册的用户</h3>
+        <table class="data-table">
+            <thead>
+                <tr><th>用户名</th><th>邀请码</th><th>注册时间</th></tr>
+            </thead>
+            <tbody>
+                {% for u in recent_users %}
+                <tr>
+                    <td>{{ u.username }}{% if u.is_admin %} <span class="badge">管理员</span>{% endif %}</td>
+                    <td>{{ u.invite_code_used or '-' }}</td>
+                    <td>{{ u.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="3" class="empty">暂无用户</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

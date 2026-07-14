@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}文件列表{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>📁 软件列表</h2>
+    <form class="search-box" method="GET">
+        <input type="text" name="q" value="{{ search }}" placeholder="搜索文件名...">
+        <button type="submit" class="btn btn-sm">搜索</button>
+    </form>
+</div>
+
+{% if categories %}
+<div class="category-bar">
+    <a href="{{ url_for('dashboard') }}" class="{{ 'active' if not current_category else '' }}">全部</a>
+    {% for cat in categories %}
+        <a href="{{ url_for('dashboard', category=cat) }}" class="{{ 'active' if current_category == cat else '' }}">{{ cat }}</a>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if files %}
+<div class="file-grid">
+    {% for file in files %}
+    <div class="file-card">
+        <div class="file-icon">📦</div>
+        <div class="file-info">
+            <h3 class="file-name">{{ file.original_name }}</h3>
+            {% if file.version %}<span class="file-version">v{{ file.version }}</span>{% endif %}
+            {% if file.description %}<p class="file-desc">{{ file.description }}</p>{% endif %}
+            <div class="file-meta">
+                <span>📊 {{ file.size | format_size }}</span>
+                <span>📂 {{ file.category }}</span>
+                <span>⬇️ {{ file.download_count }} 次</span>
+                <span>📅 {{ file.created_at.strftime('%Y-%m-%d') }}</span>
+            </div>
+        </div>
+        <a href="{{ url_for('download_file', file_id=file.id) }}" class="btn">下载</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>📭 暂无可用文件</p>
+</div>
+{% endif %}
+{% endblock %}

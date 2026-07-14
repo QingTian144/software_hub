@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+{% block title %}上传文件{% endblock %}
+{% block content %}
+<h2 class="page-title">⬆️ 上传文件</h2>
+
+<div class="upload-card">
+    <form method="POST" enctype="multipart/form-data" class="auth-form">
+        <div class="form-group">
+            <label>选择文件</label>
+            <div class="file-drop" id="dropZone">
+                <input type="file" name="file" id="fileInput" required>
+                <p>📁 点击选择文件或拖拽到此处</p>
+                <p class="file-hint">支持任意类型文件，最大 2GB</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>分类（如：工具/游戏/驱动）</label>
+            <input type="text" name="category" placeholder="默认：其他">
+        </div>
+        <div class="form-group">
+            <label>版本号（可选）</label>
+            <input type="text" name="version" placeholder="如：1.0.0">
+        </div>
+        <div class="form-group">
+            <label>描述（可选）</label>
+            <textarea name="description" rows="4" placeholder="软件简介、使用说明等"></textarea>
+        </div>
+        <button type="submit" class="btn btn-block">开始上传</button>
+    </form>
+</div>
+
+<script>
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    fileInput.files = e.dataTransfer.files;
+});
+fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) {
+        dropZone.querySelector('p').textContent = '📎 ' + fileInput.files[0].name;
+    }
+});
+</script>
+{% endblock %}

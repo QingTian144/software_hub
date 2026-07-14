@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}管理后台{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <span class="logo-icon">◈</span>
+                <span>管理后台</span>
+            </div>
+            <nav class="admin-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.endpoint == 'admin_dashboard' else '' }}">📊 概览</a>
+                <a href="{{ url_for('admin_upload') }}" class="{{ 'active' if request.endpoint == 'admin_upload' else '' }}">⬆️ 上传文件</a>
+                <a href="{{ url_for('admin_files') }}" class="{{ 'active' if request.endpoint == 'admin_files' else '' }}">📁 文件管理</a>
+                <a href="{{ url_for('admin_users') }}" class="{{ 'active' if request.endpoint == 'admin_users' else '' }}">👥 用户管理</a>
+                <a href="{{ url_for('admin_invites') }}" class="{{ 'active' if request.endpoint == 'admin_invites' else '' }}">🎟️ 邀请码</a>
+            </nav>
+            <div class="admin-sidebar-footer">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-block">← 返回前台</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-block btn-outline">退出登录</a>
+            </div>
+        </aside>
+        <main class="admin-main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

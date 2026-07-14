@@ -1,0 +1,72 @@
+{% extends 'admin/base.html' %}
+{% block title %}邀请码管理{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>🎟️ 邀请码管理</h2>
+</div>
+
+<div class="invite-create-card">
+    <h3>创建邀请码</h3>
+    <form method="POST" class="auth-form">
+        <input type="hidden" name="action" value="create">
+        <div class="form-row">
+            <div class="form-group">
+                <label>自定义邀请码（留空则自动生成）</label>
+                <input type="text" name="code" placeholder="如：VIP2024 或留空自动生成">
+            </div>
+            <div class="form-group">
+                <label>批量生成数量</label>
+                <input type="number" name="count" value="1" min="1" max="50">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>备注（可选）</label>
+            <input type="text" name="note" placeholder="如：给张三的邀请码">
+        </div>
+        <button type="submit" class="btn">创建邀请码</button>
+    </form>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>邀请码</th>
+            <th>状态</th>
+            <th>使用者</th>
+            <th>备注</th>
+            <th>创建时间</th>
+            <th>使用时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for invite in invites %}
+        <tr>
+            <td class="invite-code">{{ invite.code }}</td>
+            <td>
+                {% if invite.used %}
+                <span class="badge badge-used">已使用</span>
+                {% else %}
+                <span class="badge badge-unused">可用</span>
+                {% endif %}
+            </td>
+            <td>{{ invite.used_by or '-' }}</td>
+            <td>{{ invite.note or '-' }}</td>
+            <td>{{ invite.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ invite.used_at.strftime('%Y-%m-%d %H:%M') if invite.used_at else '-' }}</td>
+            <td>
+                {% if not invite.used %}
+                <form method="POST" action="{{ url_for('admin_invites') }}" style="display:inline">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="invite_id" value="{{ invite.id }}">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('确定删除此邀请码？')">删除</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty">暂无邀请码</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

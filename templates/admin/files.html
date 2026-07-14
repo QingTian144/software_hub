@@ -1,0 +1,80 @@
+{% extends 'admin/base.html' %}
+{% block title %}文件管理{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>📁 文件管理</h2>
+    <a href="{{ url_for('admin_upload') }}" class="btn">⬆️ 上传新文件</a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>文件名</th>
+            <th>分类</th>
+            <th>版本</th>
+            <th>大小</th>
+            <th>下载量</th>
+            <th>上传时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for file in files %}
+        <tr>
+            <td>{{ file.original_name }}</td>
+            <td>{{ file.category }}</td>
+            <td>{{ file.version or '-' }}</td>
+            <td>{{ file.size | format_size }}</td>
+            <td>{{ file.download_count }}</td>
+            <td>{{ file.created_at.strftime('%Y-%m-%d') }}</td>
+            <td class="actions">
+                <button onclick="editFile({{ file.id }}, '{{ file.description|default('') }}', '{{ file.category }}', '{{ file.version }}')" class="btn btn-sm">编辑</button>
+                <form method="POST" action="{{ url_for('admin_delete_file', file_id=file.id) }}" style="display:inline" onconfirm="return confirm('确定删除？')">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('确定删除文件「{{ file.original_name }}」？')">删除</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty">暂无文件</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- 编辑弹窗 -->
+<div id="editModal" class="modal" style="display:none">
+    <div class="modal-content">
+        <h3>编辑文件信息</h3>
+        <form method="POST" id="editForm">
+            <div class="form-group">
+                <label>描述</label>
+                <textarea name="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>分类</label>
+                <input type="text" name="category">
+            </div>
+            <div class="form-group">
+                <label>版本</label>
+                <input type="text" name="version">
+            </div>
+            <div class="modal-actions">
+                <button type="button" onclick="closeModal()" class="btn btn-outline">取消</button>
+                <button type="submit" class="btn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function editFile(id, desc, cat, ver) {
+    document.getElementById('editForm').action = '/admin/files/' + id + '/edit';
+    document.querySelector('#editForm [name="description"]').value = desc;
+    document.querySelector('#editForm [name="category"]').value = cat;
+    document.querySelector('#editForm [name="version"]').value = ver;
+    document.getElementById('editModal').style.display = 'flex';
+}
+function closeModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+</script>
+{% endblock %}

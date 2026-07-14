@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}软件中心 - 首页{% endblock %}
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <h1>软件下载中心</h1>
+        <p class="hero-subtitle">安全 · 私密 · 邀请制</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('login') }}" class="btn btn-lg">登录</a>
+            <a href="{{ url_for('register') }}" class="btn btn-lg btn-outline">注册（需邀请码）</a>
+        </div>
+    </div>
+</div>
+<div class="features">
+    <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>邀请制访问</h3>
+        <p>仅限持有邀请码的用户注册，保障资源安全</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>高速下载</h3>
+        <p>直连服务器下载，稳定快速</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <h3>软件资源</h3>
+        <p>精选软件工具，持续更新</p>
+    </div>
+</div>
+{% endblock %}
